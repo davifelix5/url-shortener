@@ -1,5 +1,4 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 
 import StatusBarPage from '../../components/StatusBarPage'
 import Menu from '../../components/Menu'
@@ -7,7 +6,10 @@ import ListItem from '../../components/ListItem'
 
 import { Container, Title, ListLinks } from './styles'
 
+import usePersistedState from '../../hooks/usePersistedState'
+
 export default function MyLinks() {
+  const [links, setLinks] = usePersistedState('@links', [])
   return (
     <Container>
       <StatusBarPage 
@@ -17,9 +19,9 @@ export default function MyLinks() {
       <Menu />
       <Title>Meus links</Title>
       <ListLinks 
-        data={[{id: 1, links: 'https://google.com'}]}
+        data={links}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <ListItem data={item} />}
+        renderItem={({ item }) => <ListItem link={item.originalLink} />}
         contentContainerStyle={{paddingBottom: 20}}
         showsVerticalScrollIndicator={false}
       />

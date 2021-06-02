@@ -22,9 +22,12 @@ import { ContainerLogo, Logo, Container, LinkInput, ButtonLink } from './styles'
 
 import api from '../../services/api'
 
+import usePersistedState from '../../hooks/usePersistedState'
+
 export default function Home() {
   
   const [input, setInput] = useState('')
+  const [links, setLinks] = usePersistedState('@links', [])
   const [modalVisible, setModalVisible] = useState(false)
   const [shortURL, setShortURL] = useState('')
   const [longURL, setLongURL] = useState('')
@@ -36,10 +39,16 @@ export default function Home() {
       const response = await api.post('/shorten', {
         long_url: input
       })
-      const { link, long_url } = response.data
+      const { link, long_url, id } = response.data
+      const newLink = {
+        id,
+        shortLink: link,
+        originalLink: long_url,
+      }
       setShortURL(link)
       setLongURL(long_url)
       setModalVisible(true)
+      setLinks([...links, newLink])
     } catch (err) {
       alert(`Erro ao fazer a requisição: ${err.message}`)
       Keyboard.dismiss()
