@@ -4,7 +4,8 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Modal 
+  Modal,
+  ActivityIndicator,
 } 
 from 'react-native'
 
@@ -19,13 +20,34 @@ import logo from '../../assets/Logo.png'
 
 import { ContainerLogo, Logo, Container, LinkInput, ButtonLink } from './styles'
 
+import api from '../../services/api'
+
 export default function Home() {
   
   const [input, setInput] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
+  const [shortURL, setShortURL] = useState('')
+  const [longURL, setLongURL] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  function handleSubmit() {
-    setModalVisible(true)
+  async function handleSubmit() {
+    setLoading(true)
+    try {
+      const response = await api.post('/shorten', {
+        long_url: input
+      })
+      const { link, long_url } = response.data
+      setShortURL(link)
+      setLongURL(long_url)
+      setModalVisible(true)
+    } catch (err) {
+      alert(`Erro ao fazer a requisição: ${err.message}`)
+      Keyboard.dismiss()
+    } finally {
+      Keyboard.dismiss()
+      setInput('')
+      setLoading(false)
+    }
   }
 
   return (
@@ -75,9 +97,11 @@ export default function Home() {
             </LinkInput>
 
             <ButtonLink onPress={handleSubmit}>
-              <ButtonLink.Text>
-                Gerar link
-              </ButtonLink.Text>
+              {loading ? <ActivityIndicator color="#121212" size={24} /> : (
+                <ButtonLink.Text>
+                  Gerar link
+                </ButtonLink.Text>
+              )}
             </ButtonLink>
 
           </Container>
@@ -88,7 +112,7 @@ export default function Home() {
           transparent 
           animationType="slide"
         >
-          <LinkModal onClose={() => setModalVisible(false)} />
+          <LinkModal longURL={longURL} shortURL={shortURL} onClose={() => setModalVisible(false)} />
         </Modal>
 
       </LinearGradient>

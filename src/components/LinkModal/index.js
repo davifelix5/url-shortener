@@ -14,17 +14,17 @@ import {
 import { Feather } from '@expo/vector-icons'
 import Clipboard from 'expo-clipboard'
 
-export default function LinkModal({ onClose }) {
+export default function LinkModal({ onClose, longURL, shortURL }) {
   
   function handleCopyLink() {
-    Clipboard.setString('https://placeholder.com.br')
+    Clipboard.setString(shortURL)
     alert('Link copiado com sucesso')
   }
   
   async function handleShare() {
     try {
       const result = await Share.share({
-        message: `Link: https://placeholder.com.br`
+        message: `Link: ${shortURL}`
       }) 
       if (result.action === Share.sharedAction) {
         if (!result.activityType)
@@ -53,11 +53,11 @@ export default function LinkModal({ onClose }) {
         <LinkArea>
           <Title>Link encurtado</Title>
           <LongUrl numberOfLines={1}>
-          https://google.com
+          {longURL}
           </LongUrl>
           <ShorLinkArea activeOpacity={1} onPress={handleCopyLink}>
             <ShortLinkUrl numberOfLines={1}>
-              https://placeholder.com.br
+              {shortURL}
             </ShortLinkUrl>
             <TouchableOpacity  onPress={handleCopyLink} >
               <Feather name="copy" color="#fff" size={25}/>
