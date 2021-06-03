@@ -15,10 +15,16 @@ export function LinksProvider({children}) {
     setLinks([...links, newLink])
   }
 
+  function removeLink(id) {
+    const newLinks = links.filter(link => link.id !== id)
+    setLinks(newLinks)
+  }
+
   return (
     <LinksContext.Provider value={{
       links,
-      addLink
+      addLink,
+      removeLink
     }}>
       {children}
     </LinksContext.Provider>

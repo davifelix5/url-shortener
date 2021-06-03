@@ -13,4 +13,13 @@ export const Link = styled.Text`
   padding-left: 20px;
   padding-right: 10px;
   font-size: 18px;
-`  
+`
+
+export const ActionsContainer = styled.TouchableOpacity`
+  background-color: #ff5555;
+  width: 15%;
+  border-radius: 7px;
+  justify-content: center;
+  align-items: center;
+  margin: 7px 10px;
+`

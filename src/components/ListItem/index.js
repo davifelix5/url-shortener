@@ -1,17 +1,35 @@
-import React from 'react'
-import { View, } from 'react-native'
+import React, { useContext } from 'react'
+import { View } from 'react-native'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 import { Feather } from '@expo/vector-icons'
 
-import { ContainerButton, Link } from './styles'
+import LinksContext from '../../contexts/links'
 
-export default function ListItem({ item, setOpenedLink }) {
+import { ContainerButton, Link, ActionsContainer } from './styles'
+
+export default function ListItem({ item, onPress }) {
+
+  const {
+    removeLink
+  } = useContext(LinksContext)
+
+  function RightActions() {
+    return (
+      <ActionsContainer onPress={() => removeLink(item.id)}>
+        <Feather name="trash" size={24} color="#fff" />
+      </ActionsContainer>
+    )
+  }      
+  
   return (
     <View>
-      <ContainerButton activeOpacity={0.9} onPress={() => setOpenedLink(item)}>
-        <Feather name="link" color="#fff" size={24} />
-        <Link numberOfLines={1}>{item.originalLink}</Link>
-      </ContainerButton>
+      <Swipeable renderRightActions={RightActions}>
+        <ContainerButton activeOpacity={0.9} onPress={onPress}>
+          <Feather name="link" color="#fff" size={24} />
+          <Link numberOfLines={1}>{item.originalLink}</Link>
+        </ContainerButton>
+      </Swipeable>
     </View>
   )
 }

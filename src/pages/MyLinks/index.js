@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react'
-import { Modal } from 'react-native'
+import { FlatList, Modal } from 'react-native'
 
 import StatusBarPage from '../../components/StatusBarPage'
 import Menu from '../../components/Menu'
 import ListItem from '../../components/ListItem'
 import LinkModal from '../../components/LinkModal'
 
-import { Container, Title, ListLinks } from './styles'
+import { Container, Title, WarningText, EmptyContainer } from './styles'
 
 import LinksContext from '../../contexts/links'
 
@@ -21,10 +21,19 @@ export default function MyLinks() {
       />
       <Menu />
       <Title>Meus links</Title>
-      <ListLinks 
+      
+      {links.length === 0 && (
+        <EmptyContainer>
+          <WarningText>
+            Você ainda não possui nenhum link :(
+          </WarningText>
+        </EmptyContainer>
+      )}
+      
+      <FlatList 
         data={links}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <ListItem item={item} setOpenedLink={setOpenedLink} />}
+        renderItem={({ item }) => <ListItem item={item} onPress={() => setOpenedLink(item)} />}
         contentContainerStyle={{paddingBottom: 20}}
         showsVerticalScrollIndicator={false}
       />
