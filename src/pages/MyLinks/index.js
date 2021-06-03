@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Modal } from 'react-native'
 
 import StatusBarPage from '../../components/StatusBarPage'
@@ -8,10 +8,10 @@ import LinkModal from '../../components/LinkModal'
 
 import { Container, Title, ListLinks } from './styles'
 
-import usePersistedState from '../../hooks/usePersistedState'
+import LinksContext from '../../contexts/links'
 
 export default function MyLinks() {
-  const [links, setLinks] = usePersistedState('@links', [])
+  const { links } = useContext(LinksContext)
   const [openedLink, setOpenedLink] = useState(null)
   return (
     <Container>

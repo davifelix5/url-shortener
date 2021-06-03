@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { 
   TouchableWithoutFeedback,
   Keyboard,
@@ -20,14 +20,13 @@ import logo from '../../assets/Logo.png'
 
 import { ContainerLogo, Logo, Container, LinkInput, ButtonLink } from './styles'
 
-import api from '../../services/api'
+import api from '../../services/api'  
 
-import usePersistedState from '../../hooks/usePersistedState'
+import LinksContext from '../../contexts/links'
 
 export default function Home() {
-  
+  const { addLink } = useContext(LinksContext)
   const [input, setInput] = useState('')
-  const [links, setLinks] = usePersistedState('@links', [])
   const [modalVisible, setModalVisible] = useState(false)
   const [shortURL, setShortURL] = useState('')
   const [longURL, setLongURL] = useState('')
@@ -48,7 +47,7 @@ export default function Home() {
       setShortURL(link)
       setLongURL(long_url)
       setModalVisible(true)
-      setLinks([...links, newLink])
+      addLink(newLink)
     } catch (err) {
       alert(`Erro ao fazer a requisição: ${err.message}`)
       Keyboard.dismiss()
